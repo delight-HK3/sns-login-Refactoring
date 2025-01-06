@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.snslogin.component.snsloginProperties;
+import com.example.snslogin.dto.userResponse;
 import com.example.snslogin.service.userService;
 import com.example.snslogin.type.UserType;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -47,21 +50,33 @@ public class snsLogincontroller {
      * @throws IOException
      */
     @GetMapping(value = "/auth/{socialLoginType}")
-    public void socialLoginType(@PathVariable(name="socialLoginType") UserType snsType) throws IOException {
+    public void socialLoginType(@PathVariable(name="socialLoginType") UserType userType) {
         
-        log.info("sns Type", snsType);
-        userService.requestloginform(snsType);
+        log.info("form userType : {}", userType);
+        userService.requestloginform(userType);
     }
 
-    
+    /**
+     * SNS 로그인 - resource 서버로 부터 유저정보 획득
+     * 
+     * @param userType
+     * @param code
+     * @return
+     */
     @GetMapping(value = "/app/accounts/auth/{socialLoginType}/callback")
-    public String getMethodName(
+    public void getMethodName(
         @PathVariable(name = "socialLoginType") UserType userType, // sns 타입
         @RequestParam(name = "code") String code // Authorization code
         ) {
-            
+        
+        log.info("resource userType : {}", userType);
 
-        return new String();
+        JsonNode userresponse = userService.snsLogin(userType, code);
+
+        log.info("userResponse : {}", userresponse);
+
+        //mav.setViewName("index"); // 메인페이지로 이동
+            
     }
     
 }
