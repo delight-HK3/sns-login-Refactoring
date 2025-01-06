@@ -1,8 +1,12 @@
 package com.example.snslogin.dto;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Builder
+@Getter
+@Setter
 public class googleAccessTokenDTO {
     private String code;            // access token
     private String client_id;       // 클라이언트 아이디
@@ -11,5 +15,5 @@ public class googleAccessTokenDTO {
     
     @Builder.Default
     private String grant_type = "authorization_code";   
-    // 인가 코드 방식을 기본으로 authorization_code 디폴트값값 설정
+    // 인가 코드 방식을 기본으로 authorization_code 디폴트값 설정
 }
