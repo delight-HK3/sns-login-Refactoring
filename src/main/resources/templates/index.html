@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+
+    <head>  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+        <meta name="google-signin-client_id" content="@{${googleClientId}}">
+        <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+        <script th:src="@{/js/bootstrap.js}"></script>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+
+        <title>sns login example</title>
+    </head>
+    <body>
+        <div class="container">
+
+            <div class="col-4"></div>
+                <div class="col-4" style="margin-top: 100px;">
+                    <button class="btn btn-success" style="width: 100%;">네이버 로그인</button>
+                    <br>
+                    <button href="" class="btn btn-warning" style="width: 100%;">카카오 로그인</button>
+                    <br>
+                    <button href="" class="btn btn-danger" style="width: 100%;"
+                        onclick="window.open('../auth/google','Login','width=600,height=800')">구글 로그인</button>
+                </div>
+            <div class="col-4"></div>
+
+        </div>
+    </body>
+</html>
