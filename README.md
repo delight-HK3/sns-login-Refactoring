@@ -2,12 +2,16 @@
 OAuth2.0기술에대해 이론을 정리하던 중 예전에 개발한 OAuth2.0을 활용한 SNS로그인 코드를 보게 되었습니다. 기존코드는 **FeignClient**을 사용하여 엑세스 토큰 및 유저 정보를 불러오는 방식을 사용했습니다.
 하지만 기존의 코드를 분석해보니 다음과 같은 문제를 확인 할 수 있었습니다.
 
+<br>
+
 ### 현재 코드의 문제점
 1. SNS별로 Authorization서버주소, Resource서버주소 모두 다르기 때문에 주소별로 FeginClient를 만들어야한다.
 2. 똑같은 기능에 똑같은 코드의 반복하기에 중복 코드가 늘어난다.
 3. 코드의 가독성 저하
 
 물론 기존의 FeginClient방식이 좋지않은 것은 아닙니다, FeginClient를 쓰면서 서버간 통신 코드가 간결해졌고 만약 Authorization서버 및 Resource서버의 도메인이 같았으면 FeginClient를 계속 사용했을 것 입니다. 하지만 Authorization서버 및 Resource서버의 도메인이 모두 달랐고 결과적으로 서버요청 기능 파일이 늘어났습니다.
+
+<br>
 
 ### 문제해결
 1번문제
@@ -67,4 +71,10 @@ environment.getProperty("spring.OAuth2."+userType+".client-secret"));
 위의 방식처럼 userType을 변수로 받아 SNS별로 설정값이 다르게 입력되도록 변경했습니다. 
 
 3번문제
-- 코드의 가독성은 기능별로 Authorization서버역할과 Resource서버의 역할을 주석으로 작성했습니다.
+- 코드 가독성문제는 기능별로 Authorization서버역할과 Resource서버의 역할을 확실히 구분지어 주석으로 작성했습니다.
+
+<br>
+
+### 실행 시 주의사항
+1. application.properties 파일의 SNS 클라이언트 및 비밀키를 사용자가 발급받은 것으로 입력 해야합니다.
+2. 각 SNS별 callback 주소또한 사용자가 설정한 것으로 입력 해야합니다.
