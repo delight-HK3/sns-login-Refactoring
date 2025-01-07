@@ -1,6 +1,7 @@
 ## 작업계기 
 OAuth2.0기술에대해 이론을 정리하던 중 예전에 개발한 OAuth2.0을 활용한 SNS로그인 코드를 보게 되었습니다. 기존코드는 **FeignClient**을 사용하여 엑세스 토큰 및 유저 정보를 불러오는 방식을 사용했습니다.
 하지만 기존의 코드를 분석해보니 다음과 같은 문제를 확인 할 수 있었습니다.
+> SNSLogin Repository : https://github.com/delight-HK3/testproject.git
 
 <br>
 
