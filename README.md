@@ -16,7 +16,7 @@ OAuth2.0기술에대해 이론을 정리하던 중 예전에 개발한 OAuth2.0�
 
 ### 문제해결
 1번문제
-- FeginClient 대신 RestTemplate객체, HttpEntity객체, JsonNode객체를 사용하여 서버와 통신했습니다.
+- FeginClient 대신 RestTemplate객체, HttpEntity객체를 사용하여 서버와 통신하고 값을 ResponseEntity<JsonNode>로 받는방법을 사용했습니다.
 ```java
 // FeginClient 방식
 @FeignClient(value = "googleAuth", url="https://oauth2.googleapis.com", configuration = {FeignConfiguration.class})
@@ -79,3 +79,8 @@ environment.getProperty("spring.OAuth2."+userType+".client-secret"));
 ### 실행 시 주의사항
 1. application.properties 파일의 SNS 클라이언트 및 비밀키를 사용자가 발급받은 것으로 입력 해야합니다.
 2. 각 SNS별 callback 주소또한 사용자가 설정한 것으로 입력 해야합니다.
+<br>
+
+### 참고한 git Repository
+https://github.com/darren-gwon/springboot_oauth_example.git
+
