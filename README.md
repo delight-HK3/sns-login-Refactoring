@@ -16,7 +16,7 @@ OAuth2.0기술에대해 이론을 정리하던 중 예전에 개발한 OAuth2.0�
 
 ### 문제해결
 1번문제
-- FeginClient 대신 RestTemplate객체, HttpEntity객체를 사용하여 서버와 통신하고 값을 ResponseEntity<JsonNode>로 받는방법을 사용했습니다.
+- FeginClient 대신 RestTemplate객체, HttpEntity객체를 사용하여 서버와 통신하고 값을 ResponseEntity로 받는방법을 사용했습니다.
 ```java
 // FeginClient 방식
 @FeignClient(value = "googleAuth", url="https://oauth2.googleapis.com", configuration = {FeignConfiguration.class})
