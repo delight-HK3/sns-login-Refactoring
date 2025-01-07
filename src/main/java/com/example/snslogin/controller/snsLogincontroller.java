@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class snsLogincontroller {
     
     private final userService userService;
-    //private final snsloginProperties snsloginProperties;
 
     // sns 로그인 관련 property value
     private final Environment properties;
