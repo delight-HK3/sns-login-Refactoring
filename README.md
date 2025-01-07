@@ -53,6 +53,9 @@ private String getAccessToken(UserType userType, String authorizationCode){
     return accessTokenNode.get("access_token").asText();
 }
 ```
+또한 JsonNode를 사용하면서 복잡한 구조의 Response를 저장할 수 있게 되었습니다.
+
+<br>
 
 2번문제
 - 중복코드는 Authorization서버 및 Resource서버 요청코드 였기에 이 문제는 어떻게 보면 properties설정을 @Value 어노테이션으로 받아왔기에 유연하게 받는 것이 불가능했습니다. 그래서 Environment객체를 활용해 properties설정파일 값을 받아왔습니다.
