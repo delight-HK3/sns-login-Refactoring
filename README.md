@@ -1,32 +1,70 @@
 ## 작업계기 
-OAuth관련 이론을 정리하던 중 예전에 제작한 snslogin 코드를 보게 되었습니다 기존에는 FeignClient을 사용하여 엑세스 토큰 및 유저 정보를 불러오는 방식을 사용했습니다 하지만 기존의 코드에 다음과 같은 문제를 지적했습니다.
+OAuth2.0기술에대해 이론을 정리하던 중 예전에 개발한 OAuth2.0을 활용한 SNS로그인 코드를 보게 되었습니다. 기존코드는 **FeignClient**을 사용하여 엑세스 토큰 및 유저 정보를 불러오는 방식을 사용했습니다.
+하지만 기존의 코드를 분석해보니 다음과 같은 문제를 확인 할 수 있었습니다.
 
-### 문제점 
-1. 한 FeignClient파일에서 하나의 서버만 통신이 가능하기에 sns방식이 추가될 때 마다 FeignClient파일을 늘려야한다.
-2. 똑같은 기능에 똑같은 코드의 반복
+### 현재 코드의 문제점
+1. SNS별로 Authorization서버주소, Resource서버주소 모두 다르기 때문에 주소별로 FeginClient를 만들어야한다.
+2. 똑같은 기능에 똑같은 코드의 반복하기에 중복 코드가 늘어난다.
 3. 코드의 가독성 저하
 
-물론 기존의 FeginClient방식이 나쁘다는 것은 아닙니다, FeginClient를 쓰면서 서버간 통신 코드가 간결해졌고 만약 인증서버 및 리소스 서버의 호출 도메인이 같았으면 FeginClient를 계속 사용했을 것 입니다. 하지만 인증 및 리소스 서버의 URL이 전부
-달랐기에 수정할 수 밖에 없었습니다.
-<br><br>
-이 Repository에 있는 코드는 기존의 testproject Repository에 있는 sns로그인 기능을 수정하고자 만들었기에
-DB 커넥션 풀 및 기존에 testproject에 있는기능은 존재하지 않습니다.
-
-> 기존 snslogin 기능 Repository : https://github.com/delight-HK3/testproject.git
-<br>
-
-### 결과화면
-
-![화면 캡처 2025-01-07 151432](https://github.com/user-attachments/assets/b65485d3-2134-4772-99ae-fa8a9d4e02d6)
-
-프로젝트를 실행하고 localhost:8099/ 으로 이동하면 다음과 같은 화면이 출력됩니다.<br>
-상단의 sns 로그인 방식 3가지 중 1개를 선택하여 로그인을 진행하면 터미널창에 해당하는 유저의 정보를 출력합니다.<br>
+물론 기존의 FeginClient방식이 좋지않은 것은 아닙니다, FeginClient를 쓰면서 서버간 통신 코드가 간결해졌고 만약 Authorization서버 및 Resource서버의 도메인이 같았으면 FeginClient를 계속 사용했을 것 입니다. 하지만 Authorization서버 및 Resource서버의 도메인이 모두 달랐고 결과적으로 서버요청 기능 파일이 늘어났습니다.
 
 ### 문제해결
-- 한 FeignClient파일에서 하나의 서버만 통신이 가능하기에 sns방식이 추가될 때 마다 FeignClient파일을 늘려야한다.
-  - 이 문제점은 FeginClient보다 앞서나온 RestTemplte와 기존에는 @Value 어노테이션을 활용해 properties파일을 가져왔으나 Environment 객체를 활용해 설정 값을 가져오는 방식을 유연화 시켰습니다.
+1번문제
+- FeginClient 대신 RestTemplate객체, HttpEntity객체, JsonNode객체를 사용하여 서버와 통신했습니다.
+```java
+// FeginClient 방식
+@FeignClient(value = "googleAuth", url="https://oauth2.googleapis.com", configuration = {FeignConfiguration.class})
+public interface GoogleAuthApi {
+    @PostMapping("/token")
+    ResponseEntity<String> getAccessToken(@RequestBody GoogleRequestAccessTokenDto requestDto);
+}
 
+// RestTemplate, HttpEntity, JsonNode 방식
 
-## 참고한 git repository
-https://github.com/darren-gwon/springboot_oauth_example.git <br>
-https://github.com/vvsungho/social-login-server.git
+// Authorization 서버를 통해 accesstoken 발급
+private String getAccessToken(UserType userType, String authorizationCode){
+    MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
+    
+    String accesstokenUrl = environment.getProperty("spring.OAuth2."+userType+".Authorization-url");
+    
+    // 각 sns별 Authorization 서버주소
+    params.add("code",authorizationCode);
+    params.add("client_id", environment.getProperty("spring.OAuth2."+userType+".client-id"));
+    params.add("client_secret",environment.getProperty("spring.OAuth2."+userType+".client-secret"));
+    params.add("redirect_uri", environment.getProperty("spring.OAuth2."+userType+".callback-url"));
+    params.add("grant_type", "authorization_code"); 
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+    HttpEntity entity = new HttpEntity(params, headers);
+
+    ResponseEntity<JsonNode> responseNode = 
+        restTemplate.exchange(accesstokenUrl, HttpMethod.POST, entity, JsonNode.class);
+        
+    JsonNode accessTokenNode = responseNode.getBody();
+
+    return accessTokenNode.get("access_token").asText();
+}
+```
+
+2번문제
+- 중복코드는 Authorization서버 및 Resource서버 요청코드 였기에 이 문제는 어떻게 보면 properties설정을 @Value 어노테이션으로 받아왔기에 유연하게 받는 것이 불가능했습니다. 그래서 Environment객체를 활용해 properties설정파일 값을 받아왔습니다.
+
+```java
+// @Value 어노테이션 방식
+@Value("${spring.OAuth2.Naver.client-id}")
+private String NAVER_SNS_CLIENT_ID;
+
+@Value("${spring.OAuth2.Naver.client-secret}")
+private String NAVER_SNS_CLIENT_SECRET;
+
+// Environment 방식
+environment.getProperty("spring.OAuth2."+userType+".client-id"));
+environment.getProperty("spring.OAuth2."+userType+".client-secret"));
+```
+위의 방식처럼 userType을 변수로 받아 SNS별로 설정값이 다르게 입력되도록 변경했습니다. 
+
+3번문제
+- 코드의 가독성은 기능별로 Authorization서버역할과 Resource서버의 역할을 주석으로 작성했습니다.
