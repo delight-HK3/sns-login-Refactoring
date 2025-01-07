@@ -18,7 +18,6 @@ import com.example.snslogin.service.userService;
 import com.example.snslogin.type.UserType;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletResponse;
 
 import org.springframework.web.bind.annotation.RequestParam;
