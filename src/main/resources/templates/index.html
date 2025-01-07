@@ -15,19 +15,25 @@
         <title>sns login example</title>
     </head>
     <body>
-        <div class="container">
-
-            <div class="col-4"></div>
-                <div class="col-4" style="margin-top: 100px;">
-                    <button class="btn btn-success" style="width: 100%;">네이버 로그인</button>
-                    <br>
-                    <button href="" class="btn btn-warning" style="width: 100%;">카카오 로그인</button>
-                    <br>
-                    <button href="" class="btn btn-danger" style="width: 100%;"
-                        onclick="window.open('../auth/google','Login','width=600,height=800')">구글 로그인</button>
+        <div class="container" style="margin-top: 100px;">
+            <div class="row">
+                <div class="col-sm-4">&nbsp;</div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">SNS 로그인</h5>
+                            <br>
+                            <button class="btn btn-success" style="width: 100%;"
+                                onclick="window.open('../auth/naver','Login','width=600,height=800')">네이버 로그인</button>
+                            <button href="" class="btn btn-warning" style="width: 100%; margin-top: 10px;"
+                                onclick="window.open('../auth/kakao','Login','width=600,height=800')">카카오 로그인</button>
+                            <button href="" class="btn btn-danger" style="width: 100%; margin-top: 10px;"
+                                onclick="window.open('../auth/google','Login','width=600,height=800')">구글 로그인</button>
+                        </div>
+                    </div>
                 </div>
-            <div class="col-4"></div>
-
+                <div class="col-sm-4">&nbsp;</div>
+            </div>
         </div>
     </body>
 </html>

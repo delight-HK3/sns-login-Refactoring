@@ -1,13 +1,11 @@
 package com.example.snslogin.dto;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@Builder
+@Setter
 public class userResponse {
-    private String snsType;         // 로그인 한 sns 타입
-    private String accessToken;     // accessToken 값
 
     // 유저 정보
     private int no;                 // 회원번호

@@ -1,7 +1,7 @@
 package com.example.snslogin.type;
 
 public enum UserType {
-    NORMAL("normal"), 
+    NONE("none"), 
     GOOGLE("google"), 
     KAKAO("kakao"), 
     NAVER("naver");
