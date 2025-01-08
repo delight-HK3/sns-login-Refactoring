@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.example.snslogin.type.UserType;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -14,6 +16,12 @@ public class NaverLoginServiceImpl implements SnsLoginService{
     
     // sns 로그인 관련 property value
     private final Environment environment;
+
+    // 로그인한 sns 타입 리턴
+    @Override
+    public UserType getUserType() {
+        return UserType.NAVER;
+    }
 
     // sns 로그인 form 호출 
     @Override   
