@@ -62,7 +62,7 @@ public class userService {
     // sns 타입 확인
     private SnsLoginService findSnsType(UserType userType){
         return loginServices.stream()
-                            .filter(x -> x.type().equals(userType))
+                            .filter(x -> x.getUserType().equals(userType))
                             .findFirst()
                             .orElseThrow(() -> new IllegalArgumentException("알 수 없는 userType 입니다."));
     }
