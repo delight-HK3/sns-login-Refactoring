@@ -14,6 +14,16 @@ OAuth2.0기술에대해 이론을 정리하던 중 예전에 개발한 OAuth2.0�
 
 <br>
 
+### 예상치 못한 성과
+원래는 sns 로그인과 일반로그인의 service를 공유하고 있었습니다. 그래서 일반로그인과 sns로그인의 로직을 완전히 분리해보니 프로그램의 확장성과 유연성이 상승하는 결과를 볼 수 있었습니다.
+
+<br>
+
+### 리펙토링 작업과 관련된 블로그 게시글
+https://velog.io/@half-phycho/Refactoring-sns-로그인-리펙토링
+
+<br>
+
 ### 문제해결
 1번문제
 - FeginClient 대신 RestTemplate객체, HttpEntity객체를 사용하여 서버와 통신하고 값을 ResponseEntity로 받는방법을 사용했습니다.
