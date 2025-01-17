@@ -31,7 +31,7 @@ public class userService {
     private final HttpServletResponse response;
     // sns 로그인 관련 property value
     private final Environment environment;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     // Authorization서버에 요청하여 accesstoken 획득 및 accesstoken으로 
     // Resource서버에 요청해 유저 정보 획득
@@ -85,9 +85,10 @@ public class userService {
 
         HttpEntity entity = new HttpEntity(params, headers);
 
+        // RestTemplate -> RestClient 도입고민 
         ResponseEntity<JsonNode> responseNode = 
             restTemplate.exchange(accesstokenUrl, HttpMethod.POST, entity, JsonNode.class);
-        
+
         JsonNode accessTokenNode = responseNode.getBody();
         
         return accessTokenNode.get("access_token").asText();
@@ -102,6 +103,7 @@ public class userService {
 
         HttpEntity entity = new HttpEntity(headers);
 
+        // RestTemplate -> RestClient 도입고민 
         return restTemplate.exchange(resourceUrl, HttpMethod.GET, entity, JsonNode.class).getBody();
     }
 
