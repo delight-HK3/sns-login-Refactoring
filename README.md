@@ -5,12 +5,18 @@ OAuth2.0기술에대해 이론을 정리하던 중 예전에 개발한 OAuth2.0�
 
 <br>
 
-### 현재 코드의 문제점
+### 현재 문제점
 1. SNS별로 Authorization서버주소, Resource서버주소 모두 다르기 때문에 주소별로 FeginClient를 만들어야한다.
 2. 똑같은 기능에 똑같은 코드의 반복하기에 중복 코드가 늘어난다.
 3. 코드의 가독성 저하
 
 물론 기존의 FeginClient방식이 좋지않은 것은 아닙니다, FeginClient를 쓰면서 서버간 통신 코드가 간결해졌고 만약 Authorization서버 및 Resource서버의 도메인이 같았으면 FeginClient를 계속 사용했을 것 입니다. 하지만 Authorization서버 및 Resource서버의 도메인이 모두 달랐고 결과적으로 서버요청 기능 파일이 늘어났습니다.
+
+### 2025/02/04 추가로 발견된 문제점
+1. FeginClient 대신 RestTemplate를 사용한 것은 좋았으나 확인해보니 deprecated될 뻔했던 기술인 것을 확인
+   - RestTemplate 대신에 RestClient를 도입할 계획
+2. 리펙토링을 해보니 결집도가 높아진 문제점이 새롭게 생김
+   - userservice 하나에서 리소스 요청 및 인가 처리를 하는 방식에서 sns별로 만들어둔 구현체에서 처리하도록 변경예정
 
 <br>
 
