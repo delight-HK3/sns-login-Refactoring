@@ -12,7 +12,7 @@ OAuth2.0기술에대해 이론을 정리하던 중 예전에 개발한 OAuth2.0�
 
 물론 기존의 FeginClient방식이 좋지않은 것은 아닙니다, FeginClient를 쓰면서 서버간 통신 코드가 간결해졌고 만약 Authorization서버 및 Resource서버의 도메인이 같았으면 FeginClient를 계속 사용했을 것 입니다. 하지만 Authorization서버 및 Resource서버의 도메인이 모두 달랐고 결과적으로 서버요청 기능 파일이 늘어났습니다.
 
-### 2025/02/04 추가로 발견된 문제점
+### 추가로 발견된 문제점
 1. FeginClient 대신 RestTemplate를 사용한 것은 좋았으나 확인해보니 deprecated될 뻔했던 기술인 것을 확인
    - RestTemplate 대신에 RestClient를 도입할 계획
 2. 리펙토링을 해보니 결집도가 높아진 문제점이 새롭게 생김
