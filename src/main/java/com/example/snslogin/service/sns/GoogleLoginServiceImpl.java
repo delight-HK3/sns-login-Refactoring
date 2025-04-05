@@ -6,16 +6,19 @@ import java.util.stream.Collectors;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.example.snslogin.dto.userResponse;
 import com.example.snslogin.type.UserType;
-
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
-@RequiredArgsConstructor
 public class GoogleLoginServiceImpl implements SnsLoginService{
 
     // sns 로그인 관련 property value
     private final Environment environment;
+
+    public GoogleLoginServiceImpl(Environment environment){
+        this.environment = environment;
+    }
 
     // 로그인한 sns 타입 리턴
     @Override
@@ -41,6 +44,16 @@ public class GoogleLoginServiceImpl implements SnsLoginService{
         String redirectURL = environment.getProperty("spring.OAuth2.GOOGLE.url")+"?"+parameterString;
 
         return redirectURL;
+    }
+
+    // 구글 로그인 jsonNode 정리
+    @Override
+    public userResponse getResponse(JsonNode jsonNode) {
+        return userResponse.builder()
+                            .id(jsonNode.get("id").asText())
+                            .email(jsonNode.get("email").asText())
+                            .nickname(jsonNode.get("name").asText())
+                            .build();
     }
 
 }

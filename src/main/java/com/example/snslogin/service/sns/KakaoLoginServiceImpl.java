@@ -6,17 +6,20 @@ import java.util.stream.Collectors;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.example.snslogin.dto.userResponse;
 import com.example.snslogin.type.UserType;
-
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
-@RequiredArgsConstructor
 public class KakaoLoginServiceImpl implements SnsLoginService{
 
     // sns 로그인 관련 property value
     private final Environment environment;
     
+    public KakaoLoginServiceImpl(Environment environment){
+        this.environment = environment;
+    }
+
     // 로그인한 sns 타입 리턴
     @Override
     public UserType getUserType() {
@@ -40,6 +43,16 @@ public class KakaoLoginServiceImpl implements SnsLoginService{
         String redirectURL = environment.getProperty("spring.OAuth2.KAKAO.url")+"?"+parameterString;
 
         return redirectURL;
+    }
+
+    // 카카오 로그인 jsonNode 정리
+    @Override
+    public userResponse getResponse(JsonNode jsonNode) {
+        return userResponse.builder()
+                            .id(jsonNode.get("id").asText())
+                            .email(jsonNode.get("kakao_account").get("email").asText())
+                            .nickname(jsonNode.get("kakao_account").get("profile").get("nickname").asText())
+                            .build();
     }
     
 }

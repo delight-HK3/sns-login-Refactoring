@@ -6,16 +6,19 @@ import java.util.stream.Collectors;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.example.snslogin.dto.userResponse;
 import com.example.snslogin.type.UserType;
-
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
-@RequiredArgsConstructor
 public class NaverLoginServiceImpl implements SnsLoginService{
     
     // sns 로그인 관련 property value
     private final Environment environment;
+
+    public NaverLoginServiceImpl(Environment environment){
+        this.environment = environment;
+    }
 
     // 로그인한 sns 타입 리턴
     @Override
@@ -41,5 +44,16 @@ public class NaverLoginServiceImpl implements SnsLoginService{
 
         return redirectURL;
     }
+
+    // 네이버 로그인 jsonNode 정리
+    @Override
+    public userResponse getResponse(JsonNode jsonNode) {
+        return userResponse.builder()
+                            .id(jsonNode.get("response").get("id").asText())
+                            .email(jsonNode.get("response").get("birthday").asText())
+                            .nickname(jsonNode.get("response").get("nickname").asText())
+                            .build();
+    }
+    
     
 }
