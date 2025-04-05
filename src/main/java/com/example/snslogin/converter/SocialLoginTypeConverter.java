@@ -6,6 +6,7 @@ import org.springframework.core.convert.converter.Converter;
 
 @Configuration
 public class SocialLoginTypeConverter implements Converter<String, UserType> {
+    
     @Override
     public UserType convert(String s) {
         // 입력받은 문자열을 모두 대문자로 변경
