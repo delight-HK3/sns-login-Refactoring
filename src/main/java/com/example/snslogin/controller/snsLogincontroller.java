@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 
 import org.springframework.web.servlet.ModelAndView;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.core.env.Environment;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.snslogin.dto.userResponse;
 import com.example.snslogin.service.userService;
 import com.example.snslogin.type.UserType;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import jakarta.servlet.ServletResponse;
 
@@ -25,13 +23,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 public class snsLogincontroller {
     
     private final userService userService;
-
     // sns 로그인 관련 property value
     private final Environment properties;
+
+    public snsLogincontroller(userService userService, Environment properties){
+        this.userService = userService;
+        this.properties = properties;
+    }
+
     /**
      * 메인페이지 로딩
      * 
@@ -74,44 +76,14 @@ public class snsLogincontroller {
         ServletResponse response) throws IOException {
         
         log.info("resource userType : {}", userType);
-
-        JsonNode jsonResponse = userService.snsLogin(userType, code);
-        userResponse userresponse = new userResponse();
+        userResponse jsonResponse = userService.snsLogin(userType, code);
         log.info("userResponse : {}", jsonResponse);
-
-        switch (userType) {
-            case GOOGLE: { // 구글 sns로그인 출력결과 처리
-                userresponse.setId(jsonResponse.get("id").asText());
-                userresponse.setEmail(jsonResponse.get("email").asText());
-                userresponse.setNickname(jsonResponse.get("name").asText());
-                break;
-            } case KAKAO: { // 카카오 sns로그인 출력결과 처리
-                userresponse.setId(jsonResponse.get("id").asText());
-                userresponse.setEmail(jsonResponse.get("kakao_account").get("email").asText());
-                userresponse.setNickname(jsonResponse.get("kakao_account").get("profile").get("nickname").asText());
-                break;
-            } case NAVER: { // 네이버 sns로그인 출력결과 처리
-                userresponse.setId(jsonResponse.get("response").get("id").asText());
-                userresponse.setEmail(jsonResponse.get("response").get("birthday").asText());
-                userresponse.setNickname(jsonResponse.get("response").get("nickname").asText());
-                break;
-            } default: {
-                throw new RuntimeException("NONE SOCIAL TYPE");
-            }
-        }
-
-        log.info("{} userresponse : {}",userType, userresponse.getId());
-        log.info("userresponse : {}", userresponse.getEmail());
-        log.info("userresponse : {}", userresponse.getNickname());
-
-        // 세션등을 사용하여 정보를 저장
 
         response.setContentType("text/html; charset=utf-8");
                     PrintWriter w = response.getWriter();
                     w.write("<script>window.close();</script>");
                     w.flush();
-                    w.close();
-            
+                    w.close();   
     }
     
 }
