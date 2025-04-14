@@ -3,7 +3,13 @@ OAuth2.0기술에대해 이론을 정리하던 중 예전에 개발한 OAuth2.0�
 하지만 기존의 코드를 분석해보니 다음과 같은 문제를 확인 할 수 있었습니다.
 > SNSLogin Repository : https://github.com/delight-HK3/testproject.git
 
-<br>
+```
+기술스택
+
+Framework : Spring boot 3.3.6
+Language : Java 17
+Tool : Visual Studio Code
+```
 
 ### 문제점
 
